@@ -31,7 +31,7 @@ public class UploadUtil {
             log.error("文件保存失败", e);
             return null;
         }
-        return dest.getName();
+        return realPath;
     }
 
     public static String upload(InputStream in, String path) throws Exception {
