@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.DemoEntityMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.domain.entity.DemoEntityDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="attributes" property="attributes" jdbcType="VARCHAR" />
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="attribute_cc" property="attributeCc" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, attributes, is_delete, gmt_create, gmt_modify, attribute_cc
+    </sql>
+
+    <sql id="Base_Sql">
+        <if test="id != null">
+            AND id = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="name != null">
+            AND name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="isDelete != null">
+            AND is_delete = #{isDelete,jdbcType=TINYINT}
+        </if>
+        <if test="isDelete == null">
+            AND is_delete = 0
+        </if>
+    </sql>
+
+    <delete id="deleteByPrimaryKey" >
+        UPDATE demo_entity SET is_delete = 1
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.demo.domain.entity.DemoEntityDO" useGeneratedKeys="true">
+        INSERT INTO demo_entity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="attributes != null">
+                attributes,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModify != null">
+                gmt_modify,
+            </if>
+            <if test="attributeCc != null">
+                attribute_cc
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="attributes != null">
+                #{attributes,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModify != null">
+                #{gmtModify,jdbcType=TIMESTAMP},
+            </if>
+            <if test="attributeCc != null">
+                #{attributeCc,jdbcType=TINYINT}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.domain.entity.DemoEntityDO">
+        UPDATE demo_entity
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="attributes != null">
+                attributes = #{attributes,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="attributeCc != null">
+                attribute_cc = #{attributeCc,jdbcType=TINYINT}
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM demo_entity
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryList" parameterType="com.example.demo.domain.query.DemoEntityQuery" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM demo_entity
+        <where>
+            <include refid="Base_Sql"/>
+        </where>
+        <if test="orderBySql != null">
+            ORDER BY ${orderBySql}
+        </if>
+        <if test="offset != null and pageSize != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+        <if test="offset == null or pageSize == null">
+            LIMIT 200
+        </if>
+    </select>
+
+    <select id="queryCount" parameterType="com.example.demo.domain.query.DemoEntityQuery" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM demo_entity
+        <where>
+            <include refid="Base_Sql"/>
+        </where>
+    </select>
+
+</mapper>

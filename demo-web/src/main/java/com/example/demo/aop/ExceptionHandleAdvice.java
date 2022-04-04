@@ -1,7 +1,7 @@
 package com.example.demo.aop;
 
-import com.example.demo.exception.DemoException;
-import com.example.demo.result.Result;
+import com.example.demo.business.exception.DemoException;
+import com.example.demo.domain.system.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
